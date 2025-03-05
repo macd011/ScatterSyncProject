@@ -1,29 +1,63 @@
 import React from "react";
-import { View, Text, SafeAreaView, TextInput, Image, TouchableOpacity, useColorScheme } from "react-native";
-import { StackNavigationProp } from "@react-navigation/stack";
+import { View, Text, TouchableOpacity, StatusBar, Image, SafeAreaView } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import type { AuthStackParamList } from "../navigation/AuthNavigator";
-
-type NavigationProps = StackNavigationProp<AuthStackParamList, "Login">;
+import FormInput from "../../components/ui/FormInput";
+import { useAuth } from "../../hooks/useAuth";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { AuthStackParamList } from "../navigation/AuthNavigator";
+import globalStyles from "../../components/styles/globalStyles";
 
 const LoginScreen = () => {
-  const navigation = useNavigation<NavigationProps>();
+  const navigation =
+    useNavigation<StackNavigationProp<AuthStackParamList, "Login">>();
+  const { email, setEmail, password, setPassword, handleLogin } = useAuth();
 
   return (
-    <SafeAreaView className="flex-1 justify-center items-center bg-white px-6">
-      <Text className="text-2xl font-bold mb-6">Welcome</Text>
-      <Image source={require("../../assets/images/LogoHighRes.png")} style={{ width: 100, height: 100, marginBottom: 20 }} resizeMode="contain"/>
+    <SafeAreaView style={globalStyles.container}>
+      <StatusBar hidden={true} />
 
-      <TextInput className="w-full border-b border-gray-300 p-3 mb-4 text-lg" placeholder="Email" />
-      <TextInput className="w-full border-b border-gray-300 p-3 text-lg" placeholder="Password" secureTextEntry />
+      {/* Logo */}
+      <Image
+        source={require("../../assets/images/LogoTransparent.png")}
+        style={globalStyles.logo}
+        resizeMode="contain"
+      />
 
-      <TouchableOpacity className="w-full py-3 rounded-lg bg-blue-500" onPress={() => navigation.replace("MainApp")}>
-        <Text className="text-white text-center text-lg font-bold">LOGIN</Text>
+      {/* Title */}
+      <Text style={globalStyles.title}>Login</Text>
+      <Text style={globalStyles.subtitle}>Please log in to continue.</Text>
+
+      {/* Input Fields */}
+      <FormInput
+        label="Email"
+        iconName="mail-outline"
+        value={email}
+        onChangeText={setEmail}
+        keyboardType="email-address"
+      />
+      <FormInput
+        label="Password"
+        iconName="lock-closed-outline"
+        secureTextEntry
+        value={password}
+        onChangeText={setPassword}
+      />
+
+      {/* Login Button */}
+      <TouchableOpacity style={globalStyles.button} onPress={handleLogin}>
+        <Text style={globalStyles.buttonText}>Login</Text>
       </TouchableOpacity>
 
-      <Text className="text-gray-500 mt-6">
+      {/* Register Link */}
+      <Text style={globalStyles.text}>
         Don't have an account?
-        <Text className="text-blue-500" onPress={() => navigation.navigate("Register")}> Sign Up</Text>
+        <Text
+          style={globalStyles.link}
+          onPress={() => navigation.navigate("Register")}
+        >
+          {" "}
+          Sign Up
+        </Text>
       </Text>
     </SafeAreaView>
   );

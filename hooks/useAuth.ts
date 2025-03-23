@@ -1,42 +1,36 @@
 import { useState } from "react";
-import { useRouter } from "expo-router"; // ✅ Import useRouter from expo-router
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "firebase/auth";
-import { auth } from "../firebaseConfig";
+import { auth, firestore } from "../firebaseConfig";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { useRouter } from "expo-router";
+import { doc, setDoc } from "firebase/firestore";
 
 export const useAuth = () => {
   const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const router = useRouter(); // ✅ Initialize router for navigation
+  const router = useRouter();
 
-  // 🔹 Login function with navigation
-  const handleLogin = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      await signInWithEmailAndPassword(auth, email, password);
-      console.log("✅ Logged in successfully!");
-
-      // ✅ Navigate to dashboard after successful login
-      router.replace("/(dashboard)/DashboardScreen");
-    } catch (err: any) {
-      console.error("❌ Login error:", err.message);
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // 🔹 Register function
   const handleRegister = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      await createUserWithEmailAndPassword(auth, email, password);
-      console.log("✅ Account created successfully!");
+    if (password !== confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
 
-      // ✅ Navigate to dashboard after successful registration
+    setLoading(true);
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+ 
+      await setDoc(doc(firestore, "users", user.uid), {
+        uid: user.uid,
+        email,
+        username,
+        createdAt: new Date().toISOString()
+      });
+
       router.replace("/(dashboard)/DashboardScreen");
     } catch (err: any) {
       console.error("❌ Registration error:", err.message);
@@ -46,17 +40,14 @@ export const useAuth = () => {
     }
   };
 
-  // 🔹 Logout function
-  const handleLogout = async () => {
+  const handleLogin = async () => {
     setLoading(true);
     try {
-      await signOut(auth);
-      console.log("✅ Logged out successfully!");
-
-      // ✅ Navigate back to login after logout
-      router.replace("/(auth)/LoginScreen");
+      await signInWithEmailAndPassword(auth, email, password);
+      router.replace("/(dashboard)/DashboardScreen");
     } catch (err: any) {
-      console.error("❌ Logout error:", err.message);
+      console.error("❌ Login error:", err.message);
+      setError(err.message);
     } finally {
       setLoading(false);
     }
@@ -65,11 +56,14 @@ export const useAuth = () => {
   return {
     email,
     setEmail,
+    username,
+    setUsername,
     password,
     setPassword,
-    handleLogin,
+    confirmPassword,
+    setConfirmPassword,
     handleRegister,
-    handleLogout,
+    handleLogin,
     loading,
     error,
   };

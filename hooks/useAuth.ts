@@ -14,27 +14,44 @@ export const useAuth = () => {
   const router = useRouter();
 
   const handleRegister = async () => {
+    if (!email || !username || !password || !confirmPassword) {
+      setError("Please fill in all fields");
+      return;
+    }
+
     if (password !== confirmPassword) {
       setError("Passwords do not match");
       return;
     }
 
     setLoading(true);
+    setError("");
+
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email.trim().toLowerCase(),
+        password
+      );
       const user = userCredential.user;
- 
+
+      // Save user document in Firestore
       await setDoc(doc(firestore, "users", user.uid), {
         uid: user.uid,
-        email,
-        username,
-        createdAt: new Date().toISOString()
+        email: email.trim().toLowerCase(),
+        username: username.trim(),
+        firstName: "",
+        lastName: "",
+        dob: "",
+        address: "",
+        phone: "",
+        createdAt: new Date().toISOString(),
       });
 
       router.replace("/(dashboard)/DashboardScreen");
     } catch (err: any) {
       console.error("❌ Registration error:", err.message);
-      setError(err.message);
+      setError(err?.message || "Something went wrong.");
     } finally {
       setLoading(false);
     }

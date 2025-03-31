@@ -1,108 +1,152 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import {
   View,
   Text,
   TouchableOpacity,
+  ScrollView,
   Animated,
-  Dimensions,
-  StyleSheet,
+  Easing,
 } from "react-native";
+import Modal from "react-native-modal";
 import { Ionicons } from "@expo/vector-icons";
+import { auth } from "../../firebaseConfig";
 import { useRouter } from "expo-router";
+import UserInfo from "./UserInfo";
+import ChangePassword from "./ChangePassword";
+import ChangeUsername from "./ChangeUsername";
+import ChangeDob from "./ChangeDob";
+import Communication from "./Communication";
+import userStyles from "./../styles/userStyles";
 
-const SCREEN_WIDTH = Dimensions.get("window").width;
+interface Props {
+  isVisible: boolean;
+  onClose: () => void;
+}
 
-const UserDrawer = ({ isVisible, onClose }: { isVisible: boolean; onClose: () => void }) => {
+type DrawerView =
+  | "main"
+  | "info"
+  | "password"
+  | "username"
+  | "dob"
+  | "communication";
+
+const UserDrawer = ({ isVisible, onClose }: Props) => {
   const router = useRouter();
-  const slideAnim = new Animated.Value(isVisible ? 0 : SCREEN_WIDTH);
+  const [view, setView] = useState<DrawerView>("main");
+  const translateX = useRef(new Animated.Value(0)).current;
+  const viewStack = useRef<DrawerView[]>(["main"]);
 
-  React.useEffect(() => {
-    Animated.timing(slideAnim, {
-      toValue: isVisible ? SCREEN_WIDTH * 0.1 : SCREEN_WIDTH,
-      duration: 300,
-      useNativeDriver: true,
-    }).start();
-  }, [isVisible]);
+  const animateTo = (direction: "forward" | "back") => {
+    const toValue = direction === "forward" ? -50 : 50;
+    Animated.sequence([
+      Animated.timing(translateX, {
+        toValue,
+        duration: 120,
+        easing: Easing.out(Easing.poly(4)),
+        useNativeDriver: true,
+      }),
+      Animated.timing(translateX, {
+        toValue: 0,
+        duration: 180,
+        easing: Easing.out(Easing.poly(4)),
+        useNativeDriver: true,
+      }),
+    ]).start();
+  };
+
+  const handleNavigate = (nextView: DrawerView) => {
+    animateTo("forward");
+    viewStack.current.push(nextView);
+    setView(nextView);
+  };
+
+  const handleBack = () => {
+    if (viewStack.current.length > 1) {
+      viewStack.current.pop();
+      animateTo("back");
+      setView(viewStack.current[viewStack.current.length - 1]);
+    } else {
+      onClose();
+    }
+  };
+
+  const handleLogout = async () => {
+    await auth.signOut();
+    onClose();
+    router.replace("/(auth)/LoginScreen");
+  };
+
+  const renderMainDrawer = () => (
+    <ScrollView contentContainerStyle={userStyles.content}>
+      <Text style={userStyles.sectionTitle}>Settings</Text>
+
+      <TouchableOpacity style={userStyles.link} onPress={() => handleNavigate("info")}>
+        <Ionicons name="person-circle-outline" size={22} color="#555" />
+        <Text style={userStyles.linkText}>User Information</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={userStyles.link} onPress={() => handleNavigate("communication")}>
+        <Ionicons name="chatbubble-ellipses-outline" size={22} color="#555" />
+        <Text style={userStyles.linkText}>Communication</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={userStyles.link}>
+        <Ionicons name="sync-outline" size={22} color="#555" />
+        <Text style={userStyles.linkText}>Sync</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={userStyles.logout} onPress={handleLogout}>
+        <Ionicons name="log-out-outline" size={20} color="#fff" />
+        <Text style={userStyles.logoutText}>Log out</Text>
+      </TouchableOpacity>
+    </ScrollView>
+  );
+
+  const renderContent = () => {
+    switch (view) {
+      case "info":
+        return (
+          <UserInfo
+            onBack={handleBack}
+            onChangePasswordPress={() => handleNavigate("password")}
+            onChangeUsernamePress={() => handleNavigate("username")}
+            onChangeDobPress={() => handleNavigate("dob")}
+          />
+        );
+      case "communication":
+        return <Communication onBack={handleBack} />;
+      case "password":
+        return <ChangePassword onBack={handleBack} />;
+      case "username":
+        return <ChangeUsername onBack={handleBack} />;
+      case "dob":
+        return <ChangeDob onBack={handleBack} />;
+      default:
+        return renderMainDrawer();
+    }
+  };
 
   return (
-    <Animated.View style={[styles.drawer, { transform: [{ translateX: slideAnim }] }]}>
-      {/* Close Button */}
-      <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-        <Ionicons name="close" size={30} color="#333" />
-      </TouchableOpacity>
-
-      {/* User Details */}
-      <Text style={styles.title}>Your Profile</Text>
-      <View style={styles.detailContainer}>
-        <Ionicons name="person-outline" size={20} color="#007AFF" />
-        <Text style={styles.detailText}>John Doe</Text>
+    <Modal
+      isVisible={isVisible}
+      onBackdropPress={onClose}
+      onSwipeComplete={onClose}
+      swipeDirection="down"
+      style={userStyles.modal}
+      propagateSwipe
+      animationIn="slideInUp"
+      animationOut="slideOutDown"
+      avoidKeyboard
+    >
+      <View style={userStyles.sheet}>
+        <View style={userStyles.handle} />
+        <Animated.View style={{ transform: [{ translateX }] }}>
+          {renderContent()}
+        </Animated.View>
       </View>
-      <View style={styles.detailContainer}>
-        <Ionicons name="calendar-outline" size={20} color="#007AFF" />
-        <Text style={styles.detailText}>01 Jan 1990</Text>
-      </View>
-      <View style={styles.detailContainer}>
-        <Ionicons name="mail-outline" size={20} color="#007AFF" />
-        <Text style={styles.detailText}>johndoe@email.com</Text>
-      </View>
-
-      {/* Settings Button */}
-      <TouchableOpacity style={styles.settingsButton} onPress={() => router.push("./(Dashboard)/SettingsScreen")}>
-        <Ionicons name="settings-outline" size={24} color="white" />
-        <Text style={styles.settingsText}>Settings</Text>
-      </TouchableOpacity>
-    </Animated.View>
+    </Modal>
   );
 };
-
-const styles = StyleSheet.create({
-  drawer: {
-    position: "absolute",
-    top: 0,
-    right: 0,
-    width: "90%",
-    height: "100%",
-    backgroundColor: "white",
-    paddingHorizontal: 20,
-    paddingTop: 50,
-    elevation: 10,
-    shadowColor: "#000",
-    shadowOpacity: 0.1,
-    shadowOffset: { width: -2, height: 0 },
-  },
-  closeButton: {
-    alignSelf: "flex-end",
-  },
-  title: {
-    fontSize: 22,
-    fontWeight: "bold",
-    color: "#333",
-    marginBottom: 20,
-  },
-  detailContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 15,
-  },
-  detailText: {
-    fontSize: 16,
-    marginLeft: 10,
-  },
-  settingsButton: {
-    flexDirection: "row",
-    backgroundColor: "#007AFF",
-    paddingVertical: 15,
-    paddingHorizontal: 20,
-    borderRadius: 10,
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: "auto",
-  },
-  settingsText: {
-    fontSize: 16,
-    color: "white",
-    marginLeft: 10,
-  },
-});
 
 export default UserDrawer;

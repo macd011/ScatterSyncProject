@@ -1,57 +1,120 @@
 import { StyleSheet } from "react-native";
 
 export default StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#f4f4f4",
+  },
+
+  // Compact Header (Original)
   header: {
-    backgroundColor: "#007AFF",
+    backgroundColor: "#683AE7",
     paddingTop: 50,
-    paddingBottom: 20,
     paddingHorizontal: 20,
+    paddingBottom: 20,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
   },
-  headerText: {
-    fontSize: 20,
+  helloText: {
     color: "#fff",
+    fontSize: 16,
+    fontWeight: "500",
+  },
+  usernameText: {
+    color: "#fff",
+    fontSize: 20,
     fontWeight: "bold",
   },
-  content: {
-    flex: 1,
-    paddingHorizontal: 20,
-    marginTop: 10,
+
+  scrollContent: {
+    paddingVertical: 20,
+    gap: 20,
   },
-  card: {
-    flexDirection: "row",
-    backgroundColor: "#F8F8F8",
-    padding: 15,
-    borderRadius: 10,
-    marginBottom: 15,
+
+  bigCard: {
+    backgroundColor: "#fff",
+    marginHorizontal: 16,
+    padding: 20,
+    borderRadius: 14,
+    shadowColor: "#000",
+    shadowOpacity: 0.05,
+    shadowRadius: 10,
+    elevation: 3,
+  },
+  bigCardTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#333",
+    marginBottom: 6,
+  },
+  bigCardText: {
+    fontSize: 14,
+    color: "#555",
+  },
+
+  // Calendar Card
+  calendarCard: {
+    backgroundColor: "#fff",
+    marginHorizontal: 16,
+    padding: 20,
+    borderRadius: 14,
+    shadowColor: "#000",
+    shadowOpacity: 0.05,
+    shadowRadius: 10,
+    elevation: 3,
+    height: 260,
+    justifyContent: "center",
     alignItems: "center",
   },
-  cardTextContainer: {
-    marginLeft: 15,
+  calendarText: {
+    fontSize: 16,
+    color: "#aaa",
   },
-  cardTitle: {
+
+  quickMenuTitle: {
     fontSize: 16,
     fontWeight: "bold",
+    color: "#333",
+    marginHorizontal: 16,
+    marginBottom: 8,
   },
-  cardSubtitle: {
+  quickCard: {
+    backgroundColor: "#fff",
+    paddingVertical: 16,
+    paddingHorizontal: 20,
+    borderRadius: 12,
+    alignItems: "center",
+    justifyContent: "center",
+    marginRight: 12,
+    width: 120,
+    shadowColor: "#000",
+    shadowOpacity: 0.05,
+    shadowRadius: 5,
+    elevation: 2,
+  },
+  quickCardText: {
     fontSize: 14,
-    color: "#666",
+    marginTop: 8,
+    color: "#333",
+    fontWeight: "600",
   },
+
   tipBox: {
-    backgroundColor: "#E0F7FA",
-    padding: 15,
-    borderRadius: 10,
-    marginBottom: 20,
+    backgroundColor: "#e3dcfc",
+    padding: 18,
+    borderRadius: 12,
+    marginTop: 10,
+    marginHorizontal: 16,
   },
   tipTitle: {
     fontSize: 16,
     fontWeight: "bold",
     marginBottom: 5,
+    color: "#683AE7",
   },
   tipText: {
     fontSize: 14,
-    color: "#333",
+    color: "#555",
   },
 });

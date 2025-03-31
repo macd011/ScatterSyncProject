@@ -10,7 +10,7 @@ interface FormInputProps {
   onChangeText: (text: string) => void;
   secureTextEntry?: boolean;
   keyboardType?: "default" | "email-address" | "numeric" | "phone-pad";
-  containerStyle?: object; // ✅ Add this line
+  containerStyle?: object;
 }
 
 const FormInput: React.FC<FormInputProps> = ({
@@ -20,7 +20,7 @@ const FormInput: React.FC<FormInputProps> = ({
   onChangeText,
   secureTextEntry,
   keyboardType,
-  containerStyle, // ✅ Use this
+  containerStyle,
 }) => {
   return (
     <View style={[globalStyles.inputContainer, containerStyle]}> 

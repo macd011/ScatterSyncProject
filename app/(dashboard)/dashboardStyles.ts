@@ -1,12 +1,15 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, Dimensions } from "react-native";
+
+const { height } = Dimensions.get("window");
 
 export default StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#f4f4f4",
+    position: "relative",
   },
 
-  // Compact Header (Original)
+  // Header
   header: {
     backgroundColor: "#683AE7",
     paddingTop: 50,
@@ -16,15 +19,25 @@ export default StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
   },
-  helloText: {
-    color: "#fff",
-    fontSize: 16,
-    fontWeight: "500",
+  headerTextContainer: {
+    flex: 1,
+    maxWidth: "50%", // Half of the header
   },
   usernameText: {
     color: "#fff",
     fontSize: 20,
     fontWeight: "bold",
+    textTransform: "uppercase",
+  },
+
+  // Purple background extension
+  purpleBackdrop: {
+    position: "absolute",
+    top: 120, // Starts just below header
+    height: height * 0.35,
+    width: "100%",
+    backgroundColor: "#683AE7",
+    zIndex: -1,
   },
 
   scrollContent: {
@@ -53,20 +66,20 @@ export default StyleSheet.create({
     color: "#555",
   },
 
-  // Calendar Card
   calendarCard: {
     backgroundColor: "#fff",
     marginHorizontal: 16,
-    padding: 20,
+    padding: 10,
     borderRadius: 14,
     shadowColor: "#000",
     shadowOpacity: 0.05,
     shadowRadius: 10,
     elevation: 3,
-    height: 260,
+    height: 330,
     justifyContent: "center",
-    alignItems: "center",
+    alignItems: "stretch", 
   },
+  
   calendarText: {
     fontSize: 16,
     color: "#aaa",
@@ -116,5 +129,43 @@ export default StyleSheet.create({
   tipText: {
     fontSize: 14,
     color: "#555",
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.4)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalContainer: {
+    width: "90%",
+    backgroundColor: "#fff",
+    padding: 20,
+    borderRadius: 16,
+    elevation: 5,
+  },
+  modalTitle: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginBottom: 10,
+    color: "#333",
+  },
+  modalInput: {
+    height: 100,
+    borderColor: "#ccc",
+    borderWidth: 1,
+    borderRadius: 10,
+    padding: 10,
+    marginBottom: 12,
+    textAlignVertical: "top",
+  },
+  saveNoteBtn: {
+    backgroundColor: "#683AE7",
+    paddingVertical: 10,
+    borderRadius: 10,
+    alignItems: "center",
+  },
+  saveNoteText: {
+    color: "#fff",
+    fontWeight: "bold",
   },
 });

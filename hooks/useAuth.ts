@@ -35,7 +35,6 @@ export const useAuth = () => {
       );
       const user = userCredential.user;
 
-      // Save user document in Firestore
       await setDoc(doc(firestore, "users", user.uid), {
         uid: user.uid,
         email: email.trim().toLowerCase(),

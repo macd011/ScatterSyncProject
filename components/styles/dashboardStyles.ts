@@ -1,6 +1,6 @@
 import { StyleSheet, Dimensions } from "react-native";
 
-const { height } = Dimensions.get("window");
+const { height, width } = Dimensions.get("window");
 
 export default StyleSheet.create({
   container: {
@@ -21,7 +21,7 @@ export default StyleSheet.create({
   },
   headerTextContainer: {
     flex: 1,
-    maxWidth: "50%", // Half of the header
+    maxWidth: "50%",
   },
   usernameText: {
     color: "#fff",
@@ -30,10 +30,9 @@ export default StyleSheet.create({
     textTransform: "uppercase",
   },
 
-  // Purple background extension
   purpleBackdrop: {
     position: "absolute",
-    top: 120, // Starts just below header
+    top: 120,
     height: height * 0.35,
     width: "100%",
     backgroundColor: "#683AE7",
@@ -65,7 +64,7 @@ export default StyleSheet.create({
     fontSize: 14,
     color: "#555",
   },
-
+  
   calendarCard: {
     backgroundColor: "#fff",
     marginHorizontal: 16,
@@ -75,9 +74,6 @@ export default StyleSheet.create({
     shadowOpacity: 0.05,
     shadowRadius: 10,
     elevation: 3,
-    height: 330,
-    justifyContent: "center",
-    alignItems: "stretch", 
   },
   
   calendarText: {
@@ -92,6 +88,16 @@ export default StyleSheet.create({
     marginHorizontal: 16,
     marginBottom: 8,
   },
+  
+  // New container for quick menu cards
+  quickMenuContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingHorizontal: 16,
+    marginBottom: 16,
+  },
+  
+  // Keep original quickCard style for compatibility
   quickCard: {
     backgroundColor: "#fff",
     paddingVertical: 16,
@@ -106,6 +112,23 @@ export default StyleSheet.create({
     shadowRadius: 5,
     elevation: 2,
   },
+  
+  // New style for the rectangular quick menu cards
+  quickMenuCard: {
+    backgroundColor: "#fff",
+    paddingVertical: 16,
+    paddingHorizontal: 10,
+    borderRadius: 12,
+    alignItems: "center",
+    justifyContent: "center",
+    width: (width - 48) / 3, // Divide screen width by 3 with margins
+    height: 90, // Fixed height for rectangular appearance
+    shadowColor: "#000",
+    shadowOpacity: 0.05,
+    shadowRadius: 5,
+    elevation: 2,
+  },
+  
   quickCardText: {
     fontSize: 14,
     marginTop: 8,

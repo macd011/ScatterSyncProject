@@ -3,8 +3,7 @@ import { View, Text, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { auth, firestore } from "../../firebaseConfig";
 import { doc, getDoc } from "firebase/firestore";
-import dashboardStyles from "./dashboardStyles";
-import BottomTab from "../../components/navigation/BottomTab";
+import dashboardStyles from "../../components/styles/dashboardStyles";
 
 const DeadlinesScreen = () => {
   const [username, setUsername] = useState("User");
@@ -31,9 +30,6 @@ const DeadlinesScreen = () => {
         </TouchableOpacity>
       </View>
 
-      {/* Content Here */}
-
-      <BottomTab />
     </View>
   );
 };

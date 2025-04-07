@@ -11,7 +11,7 @@ import {
 import { Calendar } from "react-native-calendars";
 import { auth, firestore } from "../../firebaseConfig";
 import { doc, getDoc, setDoc } from "firebase/firestore";
-import dashboardStyles from "./dashboardStyles";
+import dashboardStyles from "../styles/dashboardStyles";
 
 interface MarkedDates {
   [date: string]: {
@@ -33,7 +33,7 @@ const CalendarCard = () => {
 
   useEffect(() => {
     if (user?.uid) fetchUserNotes();
-  }, [user]);
+  }, []);
 
   const fetchUserNotes = async () => {
     if (!user?.uid) return;
@@ -80,7 +80,12 @@ const CalendarCard = () => {
 
     const userRef = doc(firestore, "users", user.uid);
     const docSnap = await getDoc(userRef);
-    const currentNotes = docSnap.exists() ? docSnap.data().notes || {} : {};
+    let currentNotes: { [key: string]: string } = {};
+
+    if (docSnap.exists()) {
+      const data = docSnap.data();
+      currentNotes = data.notes || {};
+    }
 
     const updatedNotes = {
       ...currentNotes,
@@ -98,9 +103,12 @@ const CalendarCard = () => {
 
     const userRef = doc(firestore, "users", user.uid);
     const docSnap = await getDoc(userRef);
+
     if (!docSnap.exists()) return;
 
-    const notes = docSnap.data().notes || {};
+    const data = docSnap.data();
+    const notes = data.notes || {};
+
     delete notes[selectedDate];
 
     await setDoc(userRef, { notes }, { merge: true });
@@ -109,18 +117,21 @@ const CalendarCard = () => {
     Alert.alert("Note deleted.");
   };
 
-  const getToday = () => new Date().toISOString().split("T")[0];
+  const getToday = () => {
+    return new Date().toISOString().split("T")[0];
+  };
 
   return (
     <View style={dashboardStyles.calendarCard}>
       <Calendar
-        style={{ width: "100%" }}
         markedDates={markedDates}
         onDayPress={handleDayPress}
+        style={{ borderRadius: 14, overflow: "hidden" }}
         theme={{
           todayTextColor: "#683AE7",
           selectedDayBackgroundColor: "#683AE7",
           arrowColor: "#683AE7",
+          monthTextColor: "#333",
         }}
       />
 
@@ -139,14 +150,18 @@ const CalendarCard = () => {
                   onChangeText={setNote}
                   multiline
                 />
+
                 <TouchableOpacity
                   style={dashboardStyles.saveNoteBtn}
                   onPress={saveNote}
                 >
                   <Text style={dashboardStyles.saveNoteText}>
-                    {markedDates[selectedDate]?.note ? "Update Note" : "Save Note"}
+                    {markedDates[selectedDate]?.note
+                      ? "Update Note"
+                      : "Save Note"}
                   </Text>
                 </TouchableOpacity>
+
                 {markedDates[selectedDate]?.note && (
                   <TouchableOpacity
                     style={[
@@ -155,7 +170,7 @@ const CalendarCard = () => {
                     ]}
                     onPress={deleteNote}
                   >
-                    <Text style={{ color: "#fff" }}>Delete Note</Text>
+                    <Text style={dashboardStyles.saveNoteText}>Delete Note</Text>
                   </TouchableOpacity>
                 )}
               </View>

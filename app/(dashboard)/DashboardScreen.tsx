@@ -9,15 +9,16 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { auth, firestore } from "../../firebaseConfig";
-import dashboardStyles from "./dashboardStyles";
-import BottomTab from "../../components/navigation/BottomTab";
+import dashboardStyles from "../../components/styles/dashboardStyles";
 import UserDrawer from "../../components/ui/UserDrawer";
-import CalendarCard from "./CalendarCard";
+import CalendarCard from "../../components/dashboard/CalendarCard";
+import { useRouter } from "expo-router";
 
 const DashboardScreen = () => {
   const [drawerVisible, setDrawerVisible] = useState(false);
   const [username, setUsername] = useState("User");
   const [streak, setStreak] = useState(0);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchUsernameAndStreak = async () => {
@@ -55,9 +56,24 @@ const DashboardScreen = () => {
   }, []);
 
   const quickMenuItems = [
-    { icon: "checkbox-outline", title: "Tasks", color: "#007AFF" },
-    { icon: "alarm-outline", title: "Focus Timer", color: "#FF3B30" },
-    { icon: "calendar-outline", title: "Deadlines", color: "#34C759" },
+    { 
+      icon: "checkbox-outline", 
+      title: "Tasks", 
+      color: "#007AFF", 
+      onPress: () => router.push("/(dashboard)/TaskManagerScreen") 
+    },
+    { 
+      icon: "alarm-outline", 
+      title: "Focus Timer", 
+      color: "#FF3B30", 
+      onPress: () => router.push("/(dashboard)/FocusTimerScreen") 
+    },
+    { 
+      icon: "calendar-outline", 
+      title: "Deadlines", 
+      color: "#34C759", 
+      onPress: () => router.push("/(dashboard)/DeadlinesScreen") 
+    },
   ];
 
   const productivityMessage = () => {
@@ -74,7 +90,7 @@ const DashboardScreen = () => {
     <View style={dashboardStyles.container}>
       <View style={dashboardStyles.header}>
         <Text style={dashboardStyles.usernameText}>
-          {username.toUpperCase()}'s DASHBOARD
+          {username.toUpperCase()}'S DASHBOARD
         </Text>
         <TouchableOpacity onPress={() => setDrawerVisible(true)}>
           <Ionicons name="person-circle-outline" size={32} color="#fff" />
@@ -92,19 +108,18 @@ const DashboardScreen = () => {
         <CalendarCard />
 
         <Text style={dashboardStyles.quickMenuTitle}>Quick Menu</Text>
-        <FlatList
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          data={quickMenuItems}
-          keyExtractor={(item) => item.title}
-          contentContainerStyle={{ paddingHorizontal: 16 }}
-          renderItem={({ item }) => (
-            <View style={dashboardStyles.quickCard}>
+        <View style={dashboardStyles.quickMenuContainer}>
+          {quickMenuItems.map((item) => (
+            <TouchableOpacity 
+              key={item.title}
+              style={dashboardStyles.quickMenuCard}
+              onPress={item.onPress}
+            >
               <Ionicons name={item.icon as any} size={26} color={item.color} />
               <Text style={dashboardStyles.quickCardText}>{item.title}</Text>
-            </View>
-          )}
-        />
+            </TouchableOpacity>
+          ))}
+        </View>
 
         <View style={dashboardStyles.tipBox}>
           <Text style={dashboardStyles.tipTitle}>Reminder for Today</Text>
@@ -113,8 +128,6 @@ const DashboardScreen = () => {
           </Text>
         </View>
       </ScrollView>
-
-      <BottomTab />
 
       {drawerVisible && (
         <UserDrawer isVisible={drawerVisible} onClose={() => setDrawerVisible(false)} />

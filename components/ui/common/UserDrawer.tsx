@@ -9,14 +9,14 @@ import {
 } from "react-native";
 import Modal from "react-native-modal";
 import { Ionicons } from "@expo/vector-icons";
-import { auth } from "../../firebaseConfig";
+import { auth } from "../../../firebaseConfig";
 import { useRouter } from "expo-router";
-import UserInfo from "./UserInfo";
-import ChangePassword from "./ChangePassword";
-import ChangeUsername from "./ChangeUsername";
-import ChangeDob from "./ChangeDob";
-import Communication from "./Communication";
-import userStyles from "./../styles/userStyles";
+import UserInfo from "../common/UserInfo";
+import ChangePassword from "../auth/ChangePassword";
+import ChangeUsername from "../auth/ChangeUsername";
+import ChangeDob from "../auth/ChangeDob";
+import Communication from "../settings/Communication";
+import userStyles from "../../styles/userStyles";
 
 interface Props {
   isVisible: boolean;

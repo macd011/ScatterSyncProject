@@ -1,15 +1,15 @@
+// components/styles/dashboardStyles.ts
 import { StyleSheet, Dimensions } from "react-native";
 
-const { height, width } = Dimensions.get("window");
+const { width } = Dimensions.get("window");
+const BAR_WIDTH = 6;
+const BAR_SPACING = 2;
 
-export default StyleSheet.create({
+const dashboardStyles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f4f4f4",
-    position: "relative",
+    backgroundColor: "#f5f5f5",
   },
-
-  // Header
   header: {
     backgroundColor: "#683AE7",
     paddingTop: 50,
@@ -19,176 +19,246 @@ export default StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
   },
-  headerTextContainer: {
-    flex: 1,
-    maxWidth: "50%",
+  roundedHeader: {
+    borderBottomLeftRadius: 15,
+    borderBottomRightRadius: 15,
   },
   usernameText: {
-    color: "#fff",
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: "bold",
-    textTransform: "uppercase",
+    color: "#fff",
   },
-
-  purpleBackdrop: {
-    position: "absolute",
-    top: 120,
-    height: height * 0.35,
-    width: "100%",
-    backgroundColor: "#683AE7",
-    zIndex: -1,
-  },
-
   scrollContent: {
-    paddingVertical: 20,
-    gap: 20,
+    padding: 15,
+    paddingBottom: 30,
   },
-
   bigCard: {
     backgroundColor: "#fff",
-    marginHorizontal: 16,
+    borderRadius: 12,
     padding: 20,
-    borderRadius: 14,
+    marginBottom: 20,
     shadowColor: "#000",
     shadowOpacity: 0.05,
-    shadowRadius: 10,
-    elevation: 3,
+    shadowRadius: 5,
+    shadowOffset: { width: 0, height: 2 },
+    elevation: 2,
   },
   bigCardTitle: {
     fontSize: 18,
     fontWeight: "bold",
     color: "#333",
-    marginBottom: 6,
+    marginBottom: 10,
   },
   bigCardText: {
-    fontSize: 14,
-    color: "#555",
-  },
-  
-  calendarCard: {
-    backgroundColor: "#fff",
-    marginHorizontal: 16,
-    padding: 10,
-    borderRadius: 14,
-    shadowColor: "#000",
-    shadowOpacity: 0.05,
-    shadowRadius: 10,
-    elevation: 3,
-  },
-  
-  calendarText: {
     fontSize: 16,
-    color: "#aaa",
+    color: "#666",
+    lineHeight: 22,
   },
-
   quickMenuTitle: {
     fontSize: 16,
     fontWeight: "bold",
     color: "#333",
-    marginHorizontal: 16,
-    marginBottom: 8,
+    marginBottom: 10,
+    marginTop: 10,
   },
-  
-  // New container for quick menu cards
   quickMenuContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    paddingHorizontal: 16,
-    marginBottom: 16,
+    marginBottom: 20,
   },
-  
-  // Keep original quickCard style for compatibility
-  quickCard: {
-    backgroundColor: "#fff",
-    paddingVertical: 16,
-    paddingHorizontal: 20,
-    borderRadius: 12,
-    alignItems: "center",
-    justifyContent: "center",
-    marginRight: 12,
-    width: 120,
-    shadowColor: "#000",
-    shadowOpacity: 0.05,
-    shadowRadius: 5,
-    elevation: 2,
-  },
-  
-  // New style for the rectangular quick menu cards
   quickMenuCard: {
     backgroundColor: "#fff",
-    paddingVertical: 16,
-    paddingHorizontal: 10,
+    width: width * 0.3 - 15,
+    height: 100,
     borderRadius: 12,
+    padding: 15,
     alignItems: "center",
     justifyContent: "center",
-    width: (width - 48) / 3, // Divide screen width by 3 with margins
-    height: 90, // Fixed height for rectangular appearance
     shadowColor: "#000",
     shadowOpacity: 0.05,
     shadowRadius: 5,
+    shadowOffset: { width: 0, height: 2 },
     elevation: 2,
   },
-  
   quickCardText: {
-    fontSize: 14,
     marginTop: 8,
+    fontSize: 14,
+    fontWeight: "500",
     color: "#333",
-    fontWeight: "600",
+    textAlign: "center",
   },
-
   tipBox: {
-    backgroundColor: "#e3dcfc",
-    padding: 18,
+    backgroundColor: "#FFD700",
     borderRadius: 12,
-    marginTop: 10,
-    marginHorizontal: 16,
+    padding: 15,
+    marginTop: 5,
+    marginBottom: 20,
   },
   tipTitle: {
     fontSize: 16,
     fontWeight: "bold",
+    color: "#333",
     marginBottom: 5,
-    color: "#683AE7",
   },
   tipText: {
     fontSize: 14,
-    color: "#555",
+    color: "#333",
   },
+  
+  // Calendar Card
+  calendarCard: {
+    backgroundColor: "#fff",
+    borderRadius: 12,
+    paddingVertical: 15,
+    paddingHorizontal: 15,
+    marginBottom: 20,
+    shadowColor: "#000",
+    shadowOpacity: 0.05,
+    shadowRadius: 5,
+    shadowOffset: { width: 0, height: 2 },
+    elevation: 2,
+  },
+  calendarHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  calendarTitle: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#333",
+  },
+  addNoteButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  addNoteText: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: '#683AE7',
+    marginLeft: 4,
+  },
+  
+  // Calendar Note Modal
   modalOverlay: {
     flex: 1,
-    backgroundColor: "rgba(0,0,0,0.4)",
+    backgroundColor: "rgba(0,0,0,0.5)",
     justifyContent: "center",
     alignItems: "center",
+    padding: 20,
   },
   modalContainer: {
-    width: "90%",
     backgroundColor: "#fff",
+    borderRadius: 12,
     padding: 20,
-    borderRadius: 16,
+    width: "90%",
+    shadowColor: "#000",
+    shadowOpacity: 0.2,
+    shadowRadius: 10,
     elevation: 5,
   },
   modalTitle: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: "bold",
-    marginBottom: 10,
     color: "#333",
+    marginBottom: 15,
   },
   modalInput: {
-    height: 100,
-    borderColor: "#ccc",
     borderWidth: 1,
-    borderRadius: 10,
+    borderColor: "#ddd",
+    borderRadius: 8,
     padding: 10,
-    marginBottom: 12,
+    minHeight: 100,
+    maxHeight: 200,
     textAlignVertical: "top",
+    fontSize: 16,
+    marginBottom: 20,
   },
   saveNoteBtn: {
     backgroundColor: "#683AE7",
-    paddingVertical: 10,
-    borderRadius: 10,
+    borderRadius: 8,
+    padding: 12,
     alignItems: "center",
   },
   saveNoteText: {
     color: "#fff",
+    fontSize: 16,
     fontWeight: "bold",
   },
+  
+  // Productivity Graph
+  graphCard: {
+    backgroundColor: "#fff",
+    borderRadius: 12,
+    padding: 15,
+    marginBottom: 20,
+    shadowColor: "#000",
+    shadowOpacity: 0.05,
+    shadowRadius: 5,
+    shadowOffset: { width: 0, height: 2 },
+    elevation: 2,
+  },
+  graphTitle: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#333",
+    marginBottom: 15,
+  },
+  loadingGraph: {
+    height: 180,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loadingText: {
+    marginTop: 10,
+    color: '#999',
+    fontSize: 14,
+  },
+  graphStatsRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginBottom: 15,
+  },
+  graphStat: {
+    alignItems: 'center',
+  },
+  graphStatValue: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#683AE7',
+  },
+  graphStatLabel: {
+    fontSize: 12,
+    color: '#666',
+    marginTop: 4,
+  },
+  graphContainer: {
+    height: 120,
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    justifyContent: 'space-between',
+    paddingHorizontal: 10,
+    marginBottom: 10,
+  },
+  graphBar: {
+    width: BAR_WIDTH,
+    backgroundColor: '#683AE7',
+    borderTopLeftRadius: 3,
+    borderTopRightRadius: 3,
+    marginHorizontal: BAR_SPACING / 2,
+  },
+  graphLabels: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 5,
+  },
+  graphLabel: {
+    fontSize: 10,
+    color: '#999',
+    width: width / 5 - 20,
+    textAlign: 'center',
+  },
 });
+
+export default dashboardStyles;

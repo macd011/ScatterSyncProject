@@ -10,8 +10,9 @@ import { Ionicons } from "@expo/vector-icons";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { auth, firestore } from "../../firebaseConfig";
 import dashboardStyles from "../../components/styles/dashboardStyles";
-import UserDrawer from "../../components/ui/UserDrawer";
+import UserDrawer from "../../components/ui/common/UserDrawer";
 import CalendarCard from "../../components/dashboard/CalendarCard";
+import ProductivityGraph from "../../components/ui/charts/ProductivityGraph";
 import { useRouter } from "expo-router";
 
 const DashboardScreen = () => {
@@ -45,7 +46,20 @@ const DashboardScreen = () => {
           }
 
           setStreak(currentStreak);
-          await setDoc(userDocRef, { lastLogin: today, streak: currentStreak }, { merge: true });
+          
+          // Save the streak and login date
+          const loginHistory = data.loginHistory || {};
+          loginHistory[today] = true;
+          
+          await setDoc(
+            userDocRef, 
+            { 
+              lastLogin: today, 
+              streak: currentStreak,
+              loginHistory: loginHistory
+            }, 
+            { merge: true }
+          );
         }
       } catch (err) {
         console.error("Error fetching user data:", err);
@@ -70,9 +84,9 @@ const DashboardScreen = () => {
     },
     { 
       icon: "calendar-outline", 
-      title: "Deadlines", 
+      title: "Scheduler", 
       color: "#34C759", 
-      onPress: () => router.push("/(dashboard)/DeadlinesScreen") 
+      onPress: () => router.push("/(dashboard)/DailyScheduleScreen") 
     },
   ];
 
@@ -88,7 +102,7 @@ const DashboardScreen = () => {
 
   return (
     <View style={dashboardStyles.container}>
-      <View style={dashboardStyles.header}>
+      <View style={[dashboardStyles.header, dashboardStyles.roundedHeader]}>
         <Text style={dashboardStyles.usernameText}>
           {username.toUpperCase()}'S DASHBOARD
         </Text>
@@ -120,6 +134,9 @@ const DashboardScreen = () => {
             </TouchableOpacity>
           ))}
         </View>
+
+        {/* Productivity Graph */}
+        <ProductivityGraph />
 
         <View style={dashboardStyles.tipBox}>
           <Text style={dashboardStyles.tipTitle}>Reminder for Today</Text>

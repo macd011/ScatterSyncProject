@@ -4,7 +4,6 @@ import {
   View,
   Text,
   TouchableOpacity,
-  TextInput,
   FlatList,
   ActivityIndicator,
   Alert
@@ -18,7 +17,8 @@ import { taskStyles } from "../../components/styles/taskStyles";
 import { useTasks } from "../../hooks/useTasks";
 import TaskCard from "../../components/tasks/TaskCard";
 import TaskModal from "../../components/tasks/TaskModal";
-import UserDrawer from "../../components/ui/UserDrawer";
+import UserDrawer from "../../components/ui/common/UserDrawer";
+
 const TaskManagerScreen = () => {
   // State
   const [username, setUsername] = useState("User");
@@ -32,8 +32,6 @@ const TaskManagerScreen = () => {
     loading,
     filter,
     setFilter,
-    searchQuery,
-    setSearchQuery,
     fetchTasks,
     saveTask,
     toggleTaskCompletion,
@@ -43,7 +41,7 @@ const TaskManagerScreen = () => {
   // Fetch username on mount
   useEffect(() => {
     fetchUserData();
-    fetchTasks();
+    fetchTasks(); // tasks will come sorted by earliest deadline (useTasks does that)
   }, []);
 
   // Get username from Firestore
@@ -88,15 +86,15 @@ const TaskManagerScreen = () => {
       "Are you sure you want to delete this task?",
       [
         { text: "Cancel", style: "cancel" },
-        { 
-          text: "Delete", 
+        {
+          text: "Delete",
           onPress: async () => {
             const success = await deleteTask(taskId);
             if (success) {
               Alert.alert("Success", "Task deleted successfully.");
             }
-          }, 
-          style: "destructive" 
+          },
+          style: "destructive",
         },
       ]
     );
@@ -104,32 +102,14 @@ const TaskManagerScreen = () => {
 
   return (
     <View style={dashboardStyles.container}>
-      {/* Header */}
-      <View style={dashboardStyles.header}>
+      {/* Header with rounded edges */}
+      <View style={[dashboardStyles.header, taskStyles.roundedHeader]}>
         <Text style={dashboardStyles.usernameText}>
           {username.toUpperCase()}'S TASKS
         </Text>
         <TouchableOpacity onPress={() => setDrawerVisible(true)}>
           <Ionicons name="person-circle-outline" size={32} color="#fff" />
         </TouchableOpacity>
-      </View>
-
-      {/* Search & Filter */}
-      <View style={taskStyles.searchContainer}>
-        <View style={taskStyles.searchInputContainer}>
-          <Ionicons name="search-outline" size={20} color="#666" />
-          <TextInput
-            style={taskStyles.searchInput}
-            placeholder="Search tasks..."
-            value={searchQuery}
-            onChangeText={setSearchQuery}
-          />
-          {searchQuery ? (
-            <TouchableOpacity onPress={() => setSearchQuery("")}>
-              <Ionicons name="close-circle" size={20} color="#666" />
-            </TouchableOpacity>
-          ) : null}
-        </View>
       </View>
 
       {/* Filter Tabs */}
@@ -142,21 +122,28 @@ const TaskManagerScreen = () => {
             All
           </Text>
         </TouchableOpacity>
-        
+
         <TouchableOpacity
           style={[taskStyles.filterTab, filter === "active" && taskStyles.activeFilterTab]}
           onPress={() => setFilter("active")}
         >
-          <Text style={[taskStyles.filterText, filter === "active" && taskStyles.activeFilterText]}>
+          <Text
+            style={[taskStyles.filterText, filter === "active" && taskStyles.activeFilterText]}
+          >
             Active
           </Text>
         </TouchableOpacity>
-        
+
         <TouchableOpacity
           style={[taskStyles.filterTab, filter === "completed" && taskStyles.activeFilterTab]}
           onPress={() => setFilter("completed")}
         >
-          <Text style={[taskStyles.filterText, filter === "completed" && taskStyles.activeFilterText]}>
+          <Text
+            style={[
+              taskStyles.filterText,
+              filter === "completed" && taskStyles.activeFilterText
+            ]}
+          >
             Completed
           </Text>
         </TouchableOpacity>
@@ -171,9 +158,7 @@ const TaskManagerScreen = () => {
         <View style={taskStyles.emptyContainer}>
           <Ionicons name="document-text-outline" size={64} color="#d0d0d0" />
           <Text style={taskStyles.emptyText}>No tasks found</Text>
-          <Text style={taskStyles.emptySubText}>
-            {searchQuery ? "Try a different search term" : "Tap the + button to add a task"}
-          </Text>
+          <Text style={taskStyles.emptySubText}>Tap the + button to add a task</Text>
         </View>
       ) : (
         <FlatList
@@ -193,15 +178,12 @@ const TaskManagerScreen = () => {
       )}
 
       {/* Add Task Button */}
-      <TouchableOpacity
-        style={taskStyles.addButton}
-        onPress={openAddTaskModal}
-      >
+      <TouchableOpacity style={taskStyles.addButton} onPress={openAddTaskModal}>
         <Ionicons name="add" size={30} color="#fff" />
       </TouchableOpacity>
 
       {/* Task Edit/Add Modal */}
-      <TaskModal 
+      <TaskModal
         visible={modalVisible}
         onClose={() => setModalVisible(false)}
         onSave={handleSaveTask}
@@ -210,10 +192,7 @@ const TaskManagerScreen = () => {
 
       {/* User Drawer */}
       {drawerVisible && (
-        <UserDrawer
-          isVisible={drawerVisible}
-          onClose={() => setDrawerVisible(false)}
-        />
+        <UserDrawer isVisible={drawerVisible} onClose={() => setDrawerVisible(false)} />
       )}
     </View>
   );

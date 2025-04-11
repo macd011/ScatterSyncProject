@@ -45,12 +45,12 @@ export default function DashboardLayout() {
         }}
       />
       <Tabs.Screen
-        name="DeadlinesScreen"
+        name="DailyScheduleScreen"
         options={{
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="calendar-outline" size={size} color={color} />
           ),
-          tabBarLabel: 'Deadlines',
+          tabBarLabel: 'Calendar',
         }}
       />
     </Tabs>

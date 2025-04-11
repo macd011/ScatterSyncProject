@@ -1,49 +1,74 @@
 // hooks/useTasks.ts
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { auth, firestore } from "../firebaseConfig";
 import {
+  doc,
   collection,
   query,
   where,
   orderBy,
   getDocs,
-  doc,
   setDoc,
   deleteDoc,
   addDoc,
   serverTimestamp,
-  Timestamp
 } from "firebase/firestore";
 import { Task } from "../components/models/task.types";
 import { Alert } from "react-native";
 
+// Create a shared state across hook instances
+const globalState = {
+  tasks: [] as Task[],
+  listeners: new Set<() => void>(),
+  notifyListeners() {
+    this.listeners.forEach(listener => listener());
+  }
+};
+
 export const useTasks = () => {
-  const [tasks, setTasks] = useState<Task[]>([]);
+  const [tasks, setTasks] = useState<Task[]>(globalState.tasks);
   const [filteredTasks, setFilteredTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
 
-  // Fetch tasks from Firestore
-  const fetchTasks = async () => {
+  // Subscribe to global state changes
+  useEffect(() => {
+    const updateLocalState = () => {
+      setTasks([...globalState.tasks]);
+    };
+    
+    // Add listener
+    globalState.listeners.add(updateLocalState);
+    
+    // Remove listener on cleanup
+    return () => {
+      globalState.listeners.delete(updateLocalState);
+    };
+  }, []);
+
+  // --- 1) Fetch tasks from the user's subcollection /users/{uid}/tasks
+  const fetchTasks = useCallback(async () => {
     setLoading(true);
     try {
       const user = auth.currentUser;
       if (!user) return;
 
-      const tasksQuery = query(
-        collection(firestore, "tasks"),
-        where("userId", "==", user.uid),
-        orderBy("createdAt", "desc")
-      );
+      // reference to the user doc: /users/{uid}
+      const userDocRef = doc(firestore, "users", user.uid);
+      // reference to the subcollection: /users/{uid}/tasks
+      const tasksRef = collection(userDocRef, "tasks");
 
-      const querySnapshot = await getDocs(tasksQuery);
+      // We'll order tasks by earliest deadline. 
+      const tasksQuery = query(tasksRef, orderBy("deadline", "asc"));
+
+      const snapshot = await getDocs(tasksQuery);
       const tasksList: Task[] = [];
 
-      querySnapshot.forEach((doc) => {
-        const data = doc.data();
+      snapshot.forEach((docSnap) => {
+        const data = docSnap.data();
         tasksList.push({
-          id: doc.id,
+          id: docSnap.id,
           title: data.title,
           description: data.description,
           category: data.category,
@@ -54,63 +79,78 @@ export const useTasks = () => {
         });
       });
 
-      setTasks(tasksList);
+      // Update global state
+      globalState.tasks = tasksList;
+      globalState.notifyListeners();
+      
+      // Local state will be updated through the listener
     } catch (error) {
       console.error("Error fetching tasks:", error);
       Alert.alert("Error", "Failed to load tasks. Please try again.");
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  // Filter tasks based on selected filter and search query
+  // --- 2) Filter tasks for the UI
   useEffect(() => {
     let result = [...tasks];
 
-    // Apply status filter
     if (filter === "active") {
       result = result.filter((task) => !task.completed);
     } else if (filter === "completed") {
       result = result.filter((task) => task.completed);
     }
 
-    // Apply search filter
     if (searchQuery.trim() !== "") {
-      const query = searchQuery.toLowerCase();
+      const q = searchQuery.toLowerCase();
       result = result.filter(
         (task) =>
-          task.title.toLowerCase().includes(query) ||
-          task.description.toLowerCase().includes(query)
+          task.title.toLowerCase().includes(q) ||
+          task.description.toLowerCase().includes(q)
       );
     }
 
     setFilteredTasks(result);
   }, [tasks, filter, searchQuery]);
 
-  // Add or update task
+  // --- 3) Add or update a task in /users/{uid}/tasks
   const saveTask = async (taskData: Partial<Task>, taskId?: string) => {
     try {
       const user = auth.currentUser;
       if (!user) return false;
 
+      // references
+      const userDocRef = doc(firestore, "users", user.uid);
+      const tasksRef = collection(userDocRef, "tasks");
+
       const data = {
         ...taskData,
-        userId: user.uid,
         updatedAt: serverTimestamp(),
       };
 
       if (taskId) {
-        // Update existing task
-        await setDoc(doc(firestore, "tasks", taskId), data, { merge: true });
+        // /users/{uid}/tasks/{taskId}
+        const taskDocRef = doc(tasksRef, taskId);
+        await setDoc(taskDocRef, data, { merge: true });
+        
+        // Update in global state
+        const updatedTasks = globalState.tasks.map(task => 
+          task.id === taskId ? { ...task, ...taskData } : task
+        );
+        globalState.tasks = updatedTasks;
+        globalState.notifyListeners();
       } else {
-        // Create new task
-        await addDoc(collection(firestore, "tasks"), {
+        const docRef = await addDoc(tasksRef, {
           ...data,
           createdAt: serverTimestamp(),
+          completed: false, // default to false if you want
         });
+        
+        // Re-fetch tasks to get the new task with its ID
+        await fetchTasks();
       }
-      
-      fetchTasks();
+
       return true;
     } catch (error) {
       console.error("Error saving task:", error);
@@ -118,16 +158,29 @@ export const useTasks = () => {
     }
   };
 
-  // Toggle task completion status
+  // --- 4) Toggle completion
   const toggleTaskCompletion = async (task: Task) => {
     try {
+      const user = auth.currentUser;
+      if (!user) return false;
+
+      const userDocRef = doc(firestore, "users", user.uid);
+      const tasksRef = collection(userDocRef, "tasks");
+      const taskDocRef = doc(tasksRef, task.id);
+
       await setDoc(
-        doc(firestore, "tasks", task.id),
+        taskDocRef,
         { completed: !task.completed, updatedAt: serverTimestamp() },
         { merge: true }
       );
 
-      setTasks(tasks.map((t) => (t.id === task.id ? {...t, completed: !task.completed} : t)));
+      // Update global state
+      const updatedTasks = globalState.tasks.map(t => 
+        t.id === task.id ? { ...t, completed: !t.completed } : t
+      );
+      globalState.tasks = updatedTasks;
+      globalState.notifyListeners();
+      
       return true;
     } catch (error) {
       console.error("Error toggling task completion:", error);
@@ -135,11 +188,23 @@ export const useTasks = () => {
     }
   };
 
-  // Delete a task
+  // --- 5) Delete a task
   const deleteTask = async (taskId: string) => {
     try {
-      await deleteDoc(doc(firestore, "tasks", taskId));
-      setTasks(tasks.filter((task) => task.id !== taskId));
+      const user = auth.currentUser;
+      if (!user) return false;
+
+      const userDocRef = doc(firestore, "users", user.uid);
+      const tasksRef = collection(userDocRef, "tasks");
+      const taskDocRef = doc(tasksRef, taskId);
+
+      await deleteDoc(taskDocRef);
+      
+      // Update global state
+      const updatedTasks = globalState.tasks.filter(t => t.id !== taskId);
+      globalState.tasks = updatedTasks;
+      globalState.notifyListeners();
+      
       return true;
     } catch (error) {
       console.error("Error deleting task:", error);
@@ -158,6 +223,6 @@ export const useTasks = () => {
     fetchTasks,
     saveTask,
     toggleTaskCompletion,
-    deleteTask
+    deleteTask,
   };
 };

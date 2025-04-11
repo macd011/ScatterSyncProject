@@ -8,9 +8,9 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import * as Notifications from "expo-notifications";
-import { auth, firestore } from "../../firebaseConfig";
+import { auth, firestore } from "../../../firebaseConfig";
 import { doc, getDoc, setDoc } from "firebase/firestore";
-import userStyles from "../styles/userStyles";
+import userStyles from "../../styles/userStyles";
 
 interface Props {
   onBack: () => void;

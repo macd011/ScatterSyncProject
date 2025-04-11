@@ -9,6 +9,7 @@ import {
   TouchableWithoutFeedback,
 } from "react-native";
 import { Calendar } from "react-native-calendars";
+import { Ionicons } from "@expo/vector-icons";
 import { auth, firestore } from "../../firebaseConfig";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import dashboardStyles from "../styles/dashboardStyles";
@@ -20,6 +21,10 @@ interface MarkedDates {
     selected?: boolean;
     selectedColor?: string;
     note?: string;
+    customStyles?: {
+      container?: object;
+      text?: object;
+    };
   };
 }
 
@@ -28,6 +33,7 @@ const CalendarCard = () => {
   const [selectedDate, setSelectedDate] = useState("");
   const [note, setNote] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
+  const [addNoteMode, setAddNoteMode] = useState(false);
 
   const user = auth.currentUser;
 
@@ -75,6 +81,14 @@ const CalendarCard = () => {
     setModalVisible(true);
   };
 
+  const handleAddNote = () => {
+    const today = getToday();
+    setSelectedDate(today);
+    setNote(markedDates[today]?.note || "");
+    setAddNoteMode(true);
+    setModalVisible(true);
+  };
+
   const saveNote = async () => {
     if (!user?.uid) return;
 
@@ -94,6 +108,7 @@ const CalendarCard = () => {
 
     await setDoc(userRef, { notes: updatedNotes }, { merge: true });
     setModalVisible(false);
+    setAddNoteMode(false);
     fetchUserNotes();
     Alert.alert("Note saved!");
   };
@@ -113,6 +128,7 @@ const CalendarCard = () => {
 
     await setDoc(userRef, { notes }, { merge: true });
     setModalVisible(false);
+    setAddNoteMode(false);
     fetchUserNotes();
     Alert.alert("Note deleted.");
   };
@@ -123,6 +139,17 @@ const CalendarCard = () => {
 
   return (
     <View style={dashboardStyles.calendarCard}>
+      <View style={dashboardStyles.calendarHeader}>
+        <Text style={dashboardStyles.calendarTitle}>Your Calendar</Text>
+        <TouchableOpacity 
+          style={dashboardStyles.addNoteButton}
+          onPress={handleAddNote}
+        >
+          <Ionicons name="add-circle-outline" size={24} color="#683AE7" />
+          <Text style={dashboardStyles.addNoteText}>Add Note</Text>
+        </TouchableOpacity>
+      </View>
+      
       <Calendar
         markedDates={markedDates}
         onDayPress={handleDayPress}
@@ -136,12 +163,15 @@ const CalendarCard = () => {
       />
 
       <Modal visible={modalVisible} animationType="slide" transparent>
-        <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
+        <TouchableWithoutFeedback onPress={() => {
+          setModalVisible(false);
+          setAddNoteMode(false);
+        }}>
           <View style={dashboardStyles.modalOverlay}>
             <TouchableWithoutFeedback>
               <View style={dashboardStyles.modalContainer}>
                 <Text style={dashboardStyles.modalTitle}>
-                  Add Note - {selectedDate}
+                  {addNoteMode ? "Add Note for Today" : `Add Note - ${selectedDate}`}
                 </Text>
                 <TextInput
                   style={dashboardStyles.modalInput}

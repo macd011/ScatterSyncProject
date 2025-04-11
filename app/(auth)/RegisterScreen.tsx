@@ -1,8 +1,8 @@
 import React from "react";
 import { View, Text, TouchableOpacity, Image, ActivityIndicator } from "react-native";
 import { useRouter } from "expo-router";
-import FormInput from "../../components/ui/FormInput";
-import authStyles from "./authStyles";
+import FormInput from "../../components/ui/forms/FormInput";
+import authStyles from "../../components/styles/authStyles";
 import { useAuth } from "../../hooks/useAuth";
 
 const RegisterScreen = () => {

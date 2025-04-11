@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import userStyles from "../styles/userStyles";
+import userStyles from "../../styles/userStyles";
 
 interface Props {
   onBack: () => void;

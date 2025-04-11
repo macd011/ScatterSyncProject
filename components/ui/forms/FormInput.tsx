@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, TextInput } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import globalStyles from "../styles/globalStyles";
+import globalStyles from "../../styles/globalStyles";
 
 interface FormInputProps {
   label: string;

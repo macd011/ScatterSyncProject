@@ -7,9 +7,9 @@ import {
 } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Ionicons } from "@expo/vector-icons";
-import { auth, firestore } from "../../firebaseConfig";
+import { auth, firestore } from "../../../firebaseConfig";
 import { doc, getDoc, setDoc } from "firebase/firestore";
-import userStyles from "../styles/userStyles";
+import userStyles from "../../styles/userStyles";
 
 interface Props {
   onBack: () => void;

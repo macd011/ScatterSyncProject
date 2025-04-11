@@ -7,14 +7,14 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { auth, firestore } from "../../firebaseConfig";
+import { auth, firestore } from "../../../firebaseConfig";
 import {
   doc,
   getDoc,
   getDocFromCache,
   setDoc,
 } from "firebase/firestore";
-import userStyles from "../styles/userStyles";
+import userStyles from "../../styles/userStyles";
 
 interface Props {
   onBack: () => void;

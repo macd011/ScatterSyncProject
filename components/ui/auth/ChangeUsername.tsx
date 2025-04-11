@@ -8,8 +8,8 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import userStyles from "../styles/userStyles";
-import { auth, firestore } from "../../firebaseConfig";
+import userStyles from "../../styles/userStyles";
+import { auth, firestore } from "../../../firebaseConfig";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 
 interface Props {

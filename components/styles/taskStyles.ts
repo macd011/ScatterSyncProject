@@ -31,7 +31,13 @@ export const taskStyles = StyleSheet.create({
     marginTop: 8,
   },
   
-  // Task card
+  // Rounded header style
+  roundedHeader: {
+    borderBottomLeftRadius: 15,
+    borderBottomRightRadius: 15,
+  },
+  
+  // Task Card
   taskCard: {
     backgroundColor: "#fff",
     borderRadius: 12,
@@ -42,11 +48,24 @@ export const taskStyles = StyleSheet.create({
     shadowRadius: 5,
     shadowOffset: { width: 0, height: 2 },
     elevation: 2,
+    position: 'relative',
   },
+
+  focusTaskCard: {
+    padding: 10,
+    marginBottom: 8,
+    borderRadius: 10,   
+  },
+  
   taskHeader: {
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 8,
+  },
+  categoryContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    maxWidth: "85%",
   },
   categoryBadge: {
     width: 12,
@@ -64,8 +83,14 @@ export const taskStyles = StyleSheet.create({
   },
   taskContent: {
     flex: 1,
+    paddingRight: 40, 
   },
-  
+  taskFooter: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginTop: 8,
+  },
   disabledButton: {
     backgroundColor: "#a890e0",
     opacity: 0.7,
@@ -104,10 +129,11 @@ export const taskStyles = StyleSheet.create({
     fontWeight: "500",
   },
   deleteButton: {
-    position: "absolute",
+    position: 'absolute',
     top: 12,
     right: 12,
-    padding: 4,
+    padding: 8,
+    zIndex: 10,
   },
   
   // Search

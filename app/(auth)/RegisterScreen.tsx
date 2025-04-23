@@ -7,34 +7,25 @@ import { useAuth } from "../../hooks/useAuth";
 
 const RegisterScreen = () => {
   const router = useRouter();
-  const {
-    email,
-    setEmail,
-    username,
-    setUsername,
-    password,
-    setPassword,
-    confirmPassword,
-    setConfirmPassword,
-    handleRegister,
-    loading,
-    error,
-  } = useAuth();
+
+  // Declare all state values and functions from the authentication hook
+  const { email, setEmail, username, setUsername, password, setPassword, confirmPassword, setConfirmPassword, handleRegister, loading, error } = useAuth();
 
   return (
     <View style={authStyles.container}>
-      {/* Logo */}
+      
+      {/* App logo at the top */}
       <Image
         source={require("../../assets/images/LogoTransparent.png")}
         style={authStyles.logo}
         resizeMode="contain"
       />
 
-      {/* Title */}
+      {/* Page title and subtext */}
       <Text style={authStyles.title}>Register</Text>
       <Text style={authStyles.subtitle}>Create an account to get started</Text>
 
-      {/* Form Inputs */}
+      {/* Input fields for username, email, password, and confirmation */}
       <View style={authStyles.inputContainer}>
         <FormInput
           label="Username"
@@ -71,10 +62,10 @@ const RegisterScreen = () => {
         />
       </View>
 
-      {/* Error Message */}
+      {/* Error message display if present */}
       {error ? <Text style={{ color: "red", marginTop: 10 }}>{error}</Text> : null}
 
-      {/* Submit Button */}
+      {/* Register button with loading indicator */}
       <TouchableOpacity
         style={authStyles.button}
         onPress={handleRegister}
@@ -87,7 +78,7 @@ const RegisterScreen = () => {
         )}
       </TouchableOpacity>
 
-      {/* Link to Login */}
+      {/* Link to the login page */}
       <View style={authStyles.linkContainer}>
         <Text>Already have an account?</Text>
         <TouchableOpacity onPress={() => router.push("/(auth)/LoginScreen")}>

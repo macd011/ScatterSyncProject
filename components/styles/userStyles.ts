@@ -104,7 +104,7 @@ const userStyles = StyleSheet.create({
     fontSize: 16,
   },
 
-  // Drawer-specific links
+  // Drawer
   content: {
     paddingBottom: 30,
   },

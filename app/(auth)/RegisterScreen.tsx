@@ -1,3 +1,4 @@
+// app/(auth)/RegisterScreen.tsx
 import React from "react";
 import { View, Text, TouchableOpacity, Image, ActivityIndicator } from "react-native";
 import { useRouter } from "expo-router";

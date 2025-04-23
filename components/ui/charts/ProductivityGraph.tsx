@@ -37,13 +37,11 @@ const ProductivityGraph = () => {
         const data = userDocSnap.data();
         const loginHistory = data.loginHistory || {};
         
-        // Get last 30 days of activity
         const last30Days = getLast30Days();
         const productivityData = last30Days.map(date => 
           loginHistory[date] ? 1 : 0
         );
         
-        // Calculate max streak from the data
         let currentStreak = 0;
         let maxFound = 0;
         
@@ -92,7 +90,6 @@ const ProductivityGraph = () => {
     );
   }
 
-  // Group data into weeks
   const weeklyData = [];
   for (let i = 0; i < 4; i++) {
     const weekStart = i * 7;

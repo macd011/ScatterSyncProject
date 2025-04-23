@@ -55,11 +55,9 @@ export const useCalendarEvents = () => {
         // Format date for marking
         const dateString = event.startDate.toDate().toISOString().split("T")[0];
         
-        // Style similar to the example image - light fill with small dot
         marked[dateString] = {
-          // Use a light tint of the event color with some opacity
           selected: true,
-          selectedColor: `${event.color}20`, // 20 is hex for 12% opacity
+          selectedColor: `${event.color}20`, 
           marked: true,
           dotColor: event.color || "#683AE7",
         };

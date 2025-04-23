@@ -59,7 +59,7 @@ const ChangeDob = ({ onBack }: Props) => {
         { merge: true }
       );
 
-      onBack(); // Return to info screen
+      onBack();
     } catch (error) {
       console.error("Failed to update DOB:", error);
     }

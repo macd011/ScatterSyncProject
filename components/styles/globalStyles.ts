@@ -20,11 +20,11 @@ export default StyleSheet.create({
     paddingBottom: 20,
   },
   innerContainer: {
-    width: "90%", // Ensures content is properly aligned
+    width: "90%", 
     alignItems: "center",
   },
   logo: {
-    width: 140, // Slightly larger for better visibility
+    width: 140, 
     height: 140,
     marginBottom: 10,
     marginTop: -40,
@@ -33,22 +33,22 @@ export default StyleSheet.create({
     fontSize: 28,
     fontWeight: "bold",
     color: "#333",
-    marginBottom: 10, // More spacing from the logo
+    marginBottom: 10,
   },
   subtitle: {
     fontSize: 16,
     color: "#666",
-    marginBottom: 20, // Adjusted for better spacing
+    marginBottom: 20,
   },
   inputContainer: {
-    width: "90%", // Now matches the button width
+    width: "90%",
     marginVertical: 8,
     alignSelf: "center",
   },
   inputLabel: {
     fontSize: 14,
     color: "#666",
-    marginBottom: 4, // Small spacing above input fields
+    marginBottom: 4,
     paddingLeft: 5,
   },
   textInputContainer: {
@@ -74,13 +74,13 @@ export default StyleSheet.create({
     alignSelf: "flex-start",
   },
   button: {
-    width: "90%", // Matches input field width
+    width: "90%",
     height: 50,
     backgroundColor: "#683AE7",
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 8,
-    marginTop: 20, // Adjusted for proper spacing
+    marginTop: 20, 
     alignSelf: "center",
   },
   buttonText: {
@@ -91,7 +91,7 @@ export default StyleSheet.create({
   text: {
     fontSize: 16,
     color: "#333",
-    marginTop: 20, // More consistent spacing
+    marginTop: 20, 
   },
   link: {
     color: "#EAB540",

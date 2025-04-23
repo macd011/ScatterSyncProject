@@ -1,13 +1,6 @@
 // app/(dashboard)/TaskManagerScreen.tsx
 import React, { useState, useEffect } from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  FlatList,
-  ActivityIndicator,
-  Alert
-} from "react-native";
+import { View, Text, TouchableOpacity, FlatList, ActivityIndicator, Alert} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { auth, firestore } from "../../firebaseConfig";
 import { doc, getDoc } from "firebase/firestore";

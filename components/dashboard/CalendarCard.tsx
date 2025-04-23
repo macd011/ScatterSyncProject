@@ -1,13 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  View,
-  Text,
-  Modal,
-  TextInput,
-  TouchableOpacity,
-  Alert,
-  TouchableWithoutFeedback,
-} from "react-native";
+import {View, Text, Modal, TextInput, TouchableOpacity, Alert, TouchableWithoutFeedback,} from "react-native";
 import { Calendar } from "react-native-calendars";
 import { Ionicons } from "@expo/vector-icons";
 import { auth, firestore } from "../../firebaseConfig";

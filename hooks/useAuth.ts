@@ -49,7 +49,7 @@ export const useAuth = () => {
 
       router.replace("/(dashboard)/DashboardScreen");
     } catch (err: any) {
-      console.error("❌ Registration error:", err.message);
+      console.error("Registration error:", err.message);
       setError(err?.message || "Something went wrong.");
     } finally {
       setLoading(false);
@@ -62,7 +62,7 @@ export const useAuth = () => {
       await signInWithEmailAndPassword(auth, email, password);
       router.replace("/(dashboard)/DashboardScreen");
     } catch (err: any) {
-      console.error("❌ Login error:", err.message);
+      console.error("Login error:", err.message);
       setError(err.message);
     } finally {
       setLoading(false);

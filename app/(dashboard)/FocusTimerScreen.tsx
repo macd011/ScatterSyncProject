@@ -1,15 +1,9 @@
 // app/(dashboard)/FocusTimerScreen.tsx
 import React, { useState, useEffect, useRef } from "react";
-import { View, Text, ScrollView, TouchableOpacity, Vibration } from "react-native";
+import { View, Text, TouchableOpacity, Vibration } from "react-native";
 import * as Notifications from "expo-notifications";
 import { auth, firestore } from "../../firebaseConfig";
-import {
-  doc,
-  addDoc,
-  collection,
-  serverTimestamp,
-  getDoc,
-} from "firebase/firestore";
+import { doc, addDoc, collection, serverTimestamp, getDoc} from "firebase/firestore";
 import { Ionicons } from "@expo/vector-icons";
 
 import FocusTimerDisplay from "../../components/focus/FocusTimerDisplay";

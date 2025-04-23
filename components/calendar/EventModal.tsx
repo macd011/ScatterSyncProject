@@ -1,18 +1,6 @@
 // components/calendar/EventModal.tsx
 import React, { useState, useEffect } from "react";
-import {
-  View,
-  Text,
-  Modal,
-  TextInput,
-  TouchableOpacity,
-  Switch,
-  ScrollView,
-  Platform,
-  KeyboardAvoidingView,
-  Alert,
-  StyleSheet
-} from "react-native";
+import { View, Text, Modal, TextInput, TouchableOpacity ,Switch, ScrollView, Platform, KeyboardAvoidingView, Alert, StyleSheet} from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Timestamp } from "firebase/firestore";
 import { CalendarEvent } from "../models/calendar.types";
@@ -188,7 +176,7 @@ const EventModal: React.FC<EventModalProps> = ({
           <View style={dailyScheduleStyles.modalContainer}>
             <View style={dailyScheduleStyles.modalHandle} />
 
-            {/* Title bar with "Edit Event"/"New Event" on the left and "Save" on the right */}
+            {/* Title bar with Edit Event, New Event, Save */}
             <View
               style={{
                 flexDirection: "row",

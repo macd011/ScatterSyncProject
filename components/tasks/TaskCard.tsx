@@ -21,10 +21,10 @@ const TaskCard = ({
   onDelete,
   variant = "default",
 }: TaskCardProps) => {
-  // Merge normal style + optional focus variant
+  //  normal style + optional focus variant
   const containerStyle = [
     taskStyles.taskCard,
-    variant === "focus" && taskStyles.focusTaskCard, // smaller style override
+    variant === "focus" && taskStyles.focusTaskCard,
   ];
 
   return (
@@ -56,7 +56,7 @@ const TaskCard = ({
         )}
       </View>
 
-      {/* Main Task Content */}
+      {/* Main Task */}
       <TouchableOpacity
         style={taskStyles.taskContent}
         onPress={() => onEdit && onEdit(task)}
@@ -103,7 +103,7 @@ const TaskCard = ({
             </View>
           )}
 
-          {/* Completion Checkbox - Removed the select button but kept completion toggle */}
+          {/* Completion Checkbox */}
           {onToggleComplete && (
             <TouchableOpacity
               style={taskStyles.taskCheckbox}

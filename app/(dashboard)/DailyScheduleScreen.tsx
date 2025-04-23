@@ -1,14 +1,6 @@
 // app/(dashboard)/DailyScheduleScreen.tsx
 import React, { useState, useEffect } from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  ActivityIndicator,
-  Alert,
-  ScrollView,
-  Image
-} from "react-native";
+import {View, Text, TouchableOpacity, ActivityIndicator, Alert, ScrollView, Image} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { auth, firestore } from "../../firebaseConfig";
 import { doc, getDoc } from "firebase/firestore";
@@ -144,7 +136,7 @@ const DailyScheduleScreen = () => {
     });
   };
 
-  // Get all-day events
+  // Get all day events
   const allDayEvents = dailyEvents.filter(event => event.allDay);
 
   // Handle event click
@@ -234,7 +226,7 @@ const DailyScheduleScreen = () => {
     return weekDates;
   };
 
-  // Hours to display (7am to 12pm)
+  // Hours to display)
   const hours = Array.from({ length: 18 }, (_, i) => i + 7);
 
   // Loading state
@@ -248,7 +240,7 @@ const DailyScheduleScreen = () => {
 
   return (
     <View style={dailyScheduleStyles.container}>
-      {/* Header - Matching dashboard style with rounded edges */}
+      {/* Header */}
       <View style={[dashboardStyles.header, dailyScheduleStyles.roundedHeader]}>
         <Text style={dashboardStyles.usernameText}>
           {username.toUpperCase()}'S SCHEDULE
@@ -296,7 +288,7 @@ const DailyScheduleScreen = () => {
       
       {/* Day Schedule */}
       <ScrollView style={dailyScheduleStyles.scheduleContainer}>
-        {/* Tasks Section - Show tasks due on this day */}
+        {/* Tasks Section */}
         {tasksForSelectedDay.length > 0 && (
           <View style={dailyScheduleStyles.tasksSectionContainer}>
             <Text style={dailyScheduleStyles.sectionTitle}>TASKS DUE TODAY</Text>
@@ -362,7 +354,7 @@ const DailyScheduleScreen = () => {
                 style={dailyScheduleStyles.eventsContainer}
                 onPress={() => handleTimeSlotPress(hour)}
               >
-                {/* Current time indicator - only show if this is the current hour */}
+                {/* Current time indicator */}
                 {hour === currentTime.hour && (
                   <View 
                     style={[
@@ -400,7 +392,7 @@ const DailyScheduleScreen = () => {
         })}
       </ScrollView>
       
-      {/* Add Button - Styled like the task add button */}
+      {/* Add Button */}
       <TouchableOpacity
         style={[dailyScheduleStyles.addButton, { backgroundColor: "#683AE7" }]}
         onPress={() => {

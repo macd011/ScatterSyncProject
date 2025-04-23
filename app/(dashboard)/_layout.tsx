@@ -6,17 +6,18 @@ export default function DashboardLayout() {
   return (
     <Tabs
       screenOptions={{
-        headerShown: false,
-        tabBarActiveTintColor: '#683AE7',
-        tabBarInactiveTintColor: '#8e8e93',
+        headerShown: false, // Hides the default header for all screens
+        tabBarActiveTintColor: '#683AE7', // Active tab icon and label colour
+        tabBarInactiveTintColor: '#8e8e93', // Inactive tab icon and label colour
         tabBarStyle: {
           height: 65,
           borderTopWidth: 1,
           borderTopColor: '#ddd',
-          backgroundColor: '#fff',
+          backgroundColor: '#fff', // Tab bar background
         },
       }}
     >
+      {/* Dashboard tab */}
       <Tabs.Screen
         name="DashboardScreen"
         options={{
@@ -26,8 +27,10 @@ export default function DashboardLayout() {
           tabBarLabel: 'Dashboard',
         }}
       />
+
+      {/* Task Manager tab */}
       <Tabs.Screen
-        name="TaskManagerScreen" 
+        name="TaskManagerScreen"
         options={{
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="checkbox-outline" size={size} color={color} />
@@ -35,6 +38,8 @@ export default function DashboardLayout() {
           tabBarLabel: 'Tasks',
         }}
       />
+
+      {/* Focus Timer tab */}
       <Tabs.Screen
         name="FocusTimerScreen"
         options={{
@@ -44,6 +49,8 @@ export default function DashboardLayout() {
           tabBarLabel: 'Timer',
         }}
       />
+
+      {/* Daily Schedule tab */}
       <Tabs.Screen
         name="DailyScheduleScreen"
         options={{

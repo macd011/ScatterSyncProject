@@ -97,7 +97,7 @@ export const focusTimerStyles = StyleSheet.create({
     fontWeight: 'bold',
   },
   
-  // Pomodoro counter - as rounded rectangles
+  // Pomodoro counter 
   pomodoroCounter: {
     flexDirection: 'row',
     justifyContent: 'center',

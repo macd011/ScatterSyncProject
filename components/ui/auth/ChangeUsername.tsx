@@ -42,8 +42,7 @@ const ChangeUsername = ({ onBack }: Props) => {
       } catch (err) {
         console.error("Failed to fetch username:", err);
       } finally {
-        // Give the UI time to breathe even if fast:
-        setTimeout(() => setLoading(false), 300); // short delay
+        setTimeout(() => setLoading(false), 300);
       }
     };
 

@@ -7,7 +7,7 @@ interface FocusTimerDisplayProps {
   timeLeft: number;
   formatTime: (seconds: number) => string;
   isActive: boolean;
-  progress: number; // 0..1 fraction
+  progress: number;
   toggleTimer: () => void;
   pomodoroCount: number;
   isBreak: boolean;

@@ -101,7 +101,7 @@ const TaskModal = ({ visible, onClose, onSave, editingTask }: TaskModalProps) =>
           <TextInput
             style={taskStyles.titleInput}
             placeholder="Task title"
-            placeholderTextColor="#bbb" // Lighter placeholder color
+            placeholderTextColor="#bbb"
             value={title}
             onChangeText={setTitle}
             maxLength={100}
@@ -110,7 +110,7 @@ const TaskModal = ({ visible, onClose, onSave, editingTask }: TaskModalProps) =>
           <TextInput
             style={taskStyles.descriptionInput}
             placeholder="Description (optional)"
-            placeholderTextColor="#bbb" // Lighter placeholder color
+            placeholderTextColor="#bbb"
             value={description}
             onChangeText={setDescription}
             multiline
@@ -129,7 +129,7 @@ const TaskModal = ({ visible, onClose, onSave, editingTask }: TaskModalProps) =>
                 style={[
                   taskStyles.categoryButton,
                   categoryId === category.id && { 
-                    backgroundColor: `${category.color}20`, // Add transparency to color
+                    backgroundColor: `${category.color}20`,
                     borderColor: category.color,
                     borderWidth: 2
                   }
@@ -153,7 +153,7 @@ const TaskModal = ({ visible, onClose, onSave, editingTask }: TaskModalProps) =>
             <Text 
               style={[
                 taskStyles.deadlineButtonText,
-                !deadline && { color: "#bbb" } // Lighter text for placeholder
+                !deadline && { color: "#bbb" }
               ]}
             >
               {deadline
@@ -184,7 +184,7 @@ const TaskModal = ({ visible, onClose, onSave, editingTask }: TaskModalProps) =>
               onChange={(event, selectedDate) => {
                 setShowDatePicker(Platform.OS === 'ios'); // Keep visible on iOS
                 if (selectedDate) setDeadline(selectedDate);
-                if (Platform.OS === 'android') setShowDatePicker(false); // Auto-close on Android
+                if (Platform.OS === 'android') setShowDatePicker(false);
               }}
             />
           )}

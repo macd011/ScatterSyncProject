@@ -47,19 +47,16 @@ export const useTasks = () => {
     };
   }, []);
 
-  // --- 1) Fetch tasks from the user's subcollection /users/{uid}/tasks
+  //Fetch tasks from the user's subcollection
   const fetchTasks = useCallback(async () => {
     setLoading(true);
     try {
       const user = auth.currentUser;
       if (!user) return;
 
-      // reference to the user doc: /users/{uid}
+      
       const userDocRef = doc(firestore, "users", user.uid);
-      // reference to the subcollection: /users/{uid}/tasks
       const tasksRef = collection(userDocRef, "tasks");
-
-      // We'll order tasks by earliest deadline. 
       const tasksQuery = query(tasksRef, orderBy("deadline", "asc"));
 
       const snapshot = await getDocs(tasksQuery);
@@ -92,7 +89,7 @@ export const useTasks = () => {
     }
   }, []);
 
-  // --- 2) Filter tasks for the UI
+  // Filter tasks for the UI
   useEffect(() => {
     let result = [...tasks];
 
@@ -114,7 +111,7 @@ export const useTasks = () => {
     setFilteredTasks(result);
   }, [tasks, filter, searchQuery]);
 
-  // --- 3) Add or update a task in /users/{uid}/tasks
+  //Add or update a task in /users/{uid}/tasks
   const saveTask = async (taskData: Partial<Task>, taskId?: string) => {
     try {
       const user = auth.currentUser;
@@ -144,10 +141,9 @@ export const useTasks = () => {
         const docRef = await addDoc(tasksRef, {
           ...data,
           createdAt: serverTimestamp(),
-          completed: false, // default to false if you want
+          completed: false, 
         });
         
-        // Re-fetch tasks to get the new task with its ID
         await fetchTasks();
       }
 
@@ -158,7 +154,7 @@ export const useTasks = () => {
     }
   };
 
-  // --- 4) Toggle completion
+  // completion
   const toggleTaskCompletion = async (task: Task) => {
     try {
       const user = auth.currentUser;
@@ -188,7 +184,7 @@ export const useTasks = () => {
     }
   };
 
-  // --- 5) Delete a task
+  // Delete a task
   const deleteTask = async (taskId: string) => {
     try {
       const user = auth.currentUser;
